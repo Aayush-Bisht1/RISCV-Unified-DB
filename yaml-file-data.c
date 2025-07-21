@@ -9,6 +9,9 @@ void emit_yaml(const char* file) {
     }
     // Output as YAML file
     for (int i = 0; i < INSTRUCTION_COUNT; ++i) {
+        // to wrap all key value pairs inside a root mapping 
+        fprintf(out, "---\n");
+        fprintf(out, "instruction:\n");
         fprintf(out, "name: \"%s\"\n", instructions[i].name);
         fprintf(out, "long_name: \"%s\"\n", instructions[i].long_name);
         fprintf(out, "description: |\n");
