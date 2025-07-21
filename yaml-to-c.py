@@ -1,12 +1,18 @@
 import yaml
 
 # This script reads a YAML file and generates a C header file with instruction data.
-yaml_file = "c.addi.yaml"      
-header_file = "inst_c.h"
+# yaml_file = "c.addi.yaml"      
+# header_file = "inst_c.h"
+
+#It uses the generated YAML file to create a C header file which should match the previous C header file.
+yaml_file = "gen.yaml"      
+header_file = "inst_c2.h"
 
 def parse_and_emit_header(yaml_path, header_path):
     with open(yaml_path) as f:
         data = yaml.safe_load(f)
+        # The grenerated YAML file should have a structure like instruction:
+        inst = data['instruction']
 
     with open(header_path, "w") as h:
         h.write("// Generated from {}\n".format(yaml_path))
@@ -20,11 +26,11 @@ def parse_and_emit_header(yaml_path, header_path):
         h.write("} instruction_t;\n\n")
         h.write("static const instruction_t instructions[] = {\n")
         h.write('    {"%s", "%s", "%s", "%s", "%s"}\n' % (
-            data.get("name", ""),
-            data.get("long_name", ""),
-            data.get("description", "").replace('\n', '\\n').replace('"', '\\"'),
-            data.get("assembly", ""),
-            data.get("encoding", {}).get("match", "")
+            inst.get("name", ""),
+            inst.get("long_name", ""),
+            inst.get("description", "").replace('\n', '\\n').replace('"', '\\"'),
+            inst.get("assembly", ""),
+            inst.get("encoding", {}).get("match", "")
         ))
         h.write("};\n\n")
         h.write("#define INSTRUCTION_COUNT 1\n")
